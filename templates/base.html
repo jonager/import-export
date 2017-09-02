@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{title}}</title>
+</head>
+<body>
+    <header>
+        <div class="cont-header">
+            <span><a href="/">jonager</a></span>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/blog">Posts</a></li>
+                    <li><a href="/newpost">Add Post</a></li>
+                    {% if not session['username'] %}
+                        <li><a href="/signup">Signup</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <nav class="side-nav">
+                <ul>
+                    {% if not session['username'] %}
+                    <li><a href="/login">Login</a></li>
+                    {% endif %}
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+                     
+        </div>
+    </header>
+        {% block content%}
+
+
+        {% endblock %}
+    <footer>
+        <div class="cont-footer">
+            <a href="https://github.com/jonager">&copy jonager</a>
+            <ul>
+                <li><a href="">Terms of service</a></li>
+                <li><a href="">Privacy Policy</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>  
+        </div>
+    </footer>
+    
+</body>
+</html>

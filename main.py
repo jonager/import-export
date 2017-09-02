@@ -4,11 +4,11 @@ from datetime import datetime
 import pandas as pd # need to install to test
 from io import BytesIO # built-in in python, no need to install
 import xlsxwriter # need to install to test
+from werkzeug import secure_filename
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-   DB name
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://import-export:123@localhost:8889/import-export'
 app.config['SQLALCHEMY_ECHO'] = True 
 
@@ -51,14 +51,22 @@ class Attendance(db.Model):
         self.owner = owner
         self.present = False
 
+
 @app.route('/', methods = ['GET'])
 def index():
-    # This is by defaul a get method, so everytime you reload '/' it pushes 
-        # the students in the  spreadsheet into the database
+    return render_template('index.html', title = 'Test')
+
+
+@app.route('/upload_file', methods = ['POST'])
+def upload_file():
+
+    if request.method == 'POST':
+        # TODO add validation, in case user didn't select any file to upload
+        file = request.files['file']
 
     # ----------- Reads Files and pushes to student table -------------
-    df = pd.read_excel('students.xlsx')
-    # df.comumns is a list of all the table headings, 'First Name' and 'Last Name'
+    df = pd.read_excel(file)
+    # df.columns is a list of all the table headings, 'First Name' and 'Last Name'
     # in this case.
     first_name = list(df[df.columns[0]])
     last_name = list(df[df.columns[1]])
@@ -71,6 +79,8 @@ def index():
         db.session.add(student)
     db.session.commit()
     return render_template('index.html', title = 'Test')
+
+
 
 
 @app.route('/download_list')
